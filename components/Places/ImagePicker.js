@@ -5,7 +5,7 @@ import {
   PermissionStatus,
 } from "expo-image-picker";
 import { Alert } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import OutlineButton from "../Interface/OutlineButton";
 import { Colors } from "../../constants/colors";
 

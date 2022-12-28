@@ -6,7 +6,7 @@ function PlaceItem({ place, onPress }) {
     <Pressable
       style={styles.containerOuter}
       android_ripple={{ color: Colors.primary100 }}
-      onPress={onPress}
+      onPress={onPress.bind(this, place.id)}
     >
       <View style={styles.containerInner}>
         <View style={styles.imgContainer}>

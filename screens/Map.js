@@ -3,12 +3,21 @@ import { Alert, StyleSheet } from "react-native";
 import { useLayoutEffect, useState, useCallback } from "react";
 import IconButton from "../components/Interface/IconButton";
 
-function Map({ navigation }) {
-  const [selectedLocation, setSelectedLocation] = useState([]);
+function Map({ navigation, route }) {
+  const initialLocation = route.params
+    ? {
+        lat: route.params.lat,
+        long: route.params.long,
+      }
+    : null;
+
+  const initTitle = route.params ? route.params.title : null;
+
+  const [selectedLocation, setSelectedLocation] = useState(initialLocation);
 
   const region = {
-    latitude: 39.9441,
-    longitude: 44.1036,
+    latitude: initialLocation ? initialLocation.lat : 39.9441,
+    longitude: initialLocation ? initialLocation.long : 44.1036,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -35,6 +44,10 @@ function Map({ navigation }) {
   }, [navigation, selectedLocation]);
 
   useLayoutEffect(() => {
+    if (initialLocation) {
+      return;
+    }
+
     navigation.setOptions({
       headerRight: ({ tintColor }) => (
         <IconButton
@@ -53,12 +66,16 @@ function Map({ navigation }) {
       onPress={selectedLocationHandler}
       initialRegion={region}
     >
-      {selectedLocation &&
-        selectedLocation.map((loc, index) => {
-          return (
-            <Marker key={index} coordinate={loc} title="Picked Location" />
-          );
-        })}
+      {selectedLocation && (
+        <Marker
+          key={Math.random() * 12}
+          coordinate={{
+            latitude: selectedLocation.lat,
+            longitude: selectedLocation.long,
+          }}
+          title={initTitle !== null ? initTitle : "Favorite Place"}
+        />
+      )}
     </MapView>
   );
 }
